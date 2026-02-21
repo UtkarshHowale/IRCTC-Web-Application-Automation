@@ -1,11 +1,15 @@
 import { test, expect } from '@playwright/test';
 import { TrainSearchPage } from '../pages/TrainSearchPage';
+import { TrainListPage } from '../pages/TrainListPage'
 
 /** @type {TrainSearchPage} */
 let trainSearchPage;
+/** @type {TrainListPage} */
+let trainListPage;
 
 test.beforeEach('Train Search Functionality Test Cases', async ({ page }) => {
     trainSearchPage = new TrainSearchPage(page);
+    trainListPage = new TrainListPage(page);
     await trainSearchPage.navigateOnTheTrainSearchPage('https://www.irctc.co.in/nget/train-search');
     await trainSearchPage.acceptAlertModal();
 });
@@ -14,7 +18,7 @@ test('TC_01 Verify that the From Station field is visible and enabled.', async (
     const fromStationFieldStatus = await trainSearchPage.isFromStationVisibleAndEnabled();
     expect(fromStationFieldStatus.isFromStationVisible).toBeTruthy();
     expect(fromStationFieldStatus.isFromStationEnabled).toBeTruthy();
-})
+});
 
 test('TC_02 Verify that station suggestions appear when the user enters a city name', async () => {
     await trainSearchPage.enterFromStation('Pune');
@@ -71,5 +75,13 @@ test('TC_09 Verify that station suggestions appear when the user enters a To Sta
 
     expect(suggestionCount).toBeGreaterThan(0);
 });
+
+test('TC_10 Verify after entering all required feilds in the train search form, train search result should show', async () => {
+    trainListPage = await trainSearchPage.searchTrains('Pune Jn', 'Miraj Jn');
+    const getTotalNumberOfTrains = await trainListPage.getTrainCount();
+    console.log('Total Number Of Available Trains Are: ' + getTotalNumberOfTrains);
+    expect(getTotalNumberOfTrains).toBeGreaterThan(0);
+})
+
 
 
