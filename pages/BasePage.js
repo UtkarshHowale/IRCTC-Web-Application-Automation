@@ -10,8 +10,8 @@ export class BasePage {
     // ==================================================
 
     async navigateTo(url) {
-        await this.page.goto(url);
-    }
+    await this.page.goto(url, { waitUntil: 'domcontentloaded' });
+}
 
     async refresh() {
         await this.page.reload();
