@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { TrainSearchPage } from '../pages/TrainSearchPage';
-import {TrainListPage} from '../pages/TrainListPage'
+import { TrainListPage } from '../pages/TrainListPage'
 
 /** @type {TrainSearchPage} */
 let trainSearchPage;
@@ -75,5 +75,13 @@ test('TC_09 Verify that station suggestions appear when the user enters a To Sta
 
     expect(suggestionCount).toBeGreaterThan(0);
 });
+
+test('TC_10 Verify after entering all required feilds in the train search form, train search result should show', async () => {
+    trainListPage = await trainSearchPage.searchTrains('Pune Jn', 'Miraj Jn');
+    const getTotalNumberOfTrains = await trainListPage.getTrainCount();
+    console.log('Total Number Of Available Trains Are: ' + getTotalNumberOfTrains);
+    expect(getTotalNumberOfTrains).toBeGreaterThan(0);
+})
+
 
 

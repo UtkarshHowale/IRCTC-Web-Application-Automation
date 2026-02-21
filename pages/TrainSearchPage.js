@@ -1,4 +1,5 @@
 import { BasePage } from "./BasePage";
+import { TrainListPage } from "./TrainListPage.js";
 
 export class TrainSearchPage extends BasePage {
 
@@ -49,8 +50,13 @@ export class TrainSearchPage extends BasePage {
         await this.selectValueFromAutoSuggestiveList(this.TRAIN_SEARCH_SUGGESSION_LIST_LOCATOR, fromStationName);
         await this.enterValueSlowerInto(this.TO_STATION_LOCATOR, toStationName);
         await this.selectValueFromAutoSuggestiveList(this.TRAIN_SEARCH_SUGGESSION_LIST_LOCATOR, toStationName);
-        await this.click(this.TRAIN_SEARCH_BUTTON_LOCATOR);
+        await Promise.all([
+            await this.click(this.TRAIN_SEARCH_BUTTON_LOCATOR),
+            await this.page.waitForURL('**/booking/train-list')
+        ]);
+        return new TrainListPage(this.page);
     }
+
     async isToStationVisibledAndEnabled() {
         const isToStationVisible = await this.isVisible(this.TO_STATION_LOCATOR);
         const isToStationEnabled = await this.isEnabled(this.TO_STATION_LOCATOR);
