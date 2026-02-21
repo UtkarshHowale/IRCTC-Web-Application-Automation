@@ -8,6 +8,10 @@ export class TrainSearchPage extends BasePage {
         this.FROM_STATION_LOCATOR = this.page.getByLabel("Enter From station");
         this.TO_STATION_LOCATOR = this.page.getByLabel("Enter To station");
         this.ALERT_MODEL_LOCATOR = this.page.locator("//button[contains(@aria-label, 'Confirmation')]");
+        this.TRAIN_SEARCH_SUGGESSION_LIST_LOCATOR = this.page.locator('.ui-autocomplete-panel');
+        this.CALENDER_INPUT_LOCATOR = this.page.getByLabel("Enter Journey Date");
+        this.TODAY_DATE_LOCATOR = this.page.locator('td.ui-datepicker-today');
+        this.TRAIN_SEARCH_BUTTON_LOCATOR = this.page.locator("button[class='search_btn train_Search']");
 
     }
 
@@ -29,6 +33,14 @@ export class TrainSearchPage extends BasePage {
         const isFromStationEnabled = await this.isEnabled(this.FROM_STATION_LOCATOR);
 
         return { isFromStationVisible, isFromStationEnabled }
+    }
+
+    async searchTrains(fromStationName, toStationName) {
+        await this.enterValueSlowerInto(this.FROM_STATION_LOCATOR, fromStationName);
+        await this.selectValueFromAutoSuggestiveList(this.TRAIN_SEARCH_SUGGESSION_LIST_LOCATOR, fromStationName);
+        await this.enterValueSlowerInto(this.TO_STATION_LOCATOR, toStationName);
+        await this.selectValueFromAutoSuggestiveList(this.TRAIN_SEARCH_SUGGESSION_LIST_LOCATOR, toStationName);
+        await this.click(this.TRAIN_SEARCH_BUTTON_LOCATOR);
     }
 }
 

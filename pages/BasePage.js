@@ -50,7 +50,7 @@ export class BasePage {
     }
 
     async enterValueSlowerInto(locator, value) {
-        await locator.pressSequentially(value);
+        await locator.pressSequentially(value, { delay: 100 });
     }
 
     async selectByValue(locator, value) {
@@ -59,6 +59,10 @@ export class BasePage {
 
     async selectByLabel(locator, label) {
         await locator.selectOption({ label });
+    }
+
+    async selectValueFromAutoSuggestiveList(locator, value) {
+        await locator.getByRole('listbox', { hasText: value }).click();
     }
 
     // ==================================================
